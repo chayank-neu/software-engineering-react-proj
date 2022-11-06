@@ -1,5 +1,5 @@
 import axios from "axios";
-const BASE_URL = "http://localhost:4000";
+const BASE_URL = "http://fse-a3-env-1.eba-pjswm9hp.us-east-1.elasticbeanstalk.com";
 const TUITS_API = `${BASE_URL}/tuits`;
 const USERS_API = `${BASE_URL}/users`;
 
