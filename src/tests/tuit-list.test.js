@@ -1,27 +1,46 @@
-import {Tuits} from "../components/tuits";
+import Tuits from "../components/tuits";
 import {screen, render} from "@testing-library/react";
 import {HashRouter} from "react-router-dom";
-import {findAllTuits} from "../services/tuits-service";
-import axios from "axios";
+import {createTuit, deleteTuitByUser, findAllTuits} from "../services/tuits-service";
+import {createUser, deleteUsersByUsername} from "../services/users-service";
 
-jest.mock('axios');
+// sample user for testing
+const testUser = {
+    username: 'tonystark',
+    password: 'stark3000',
+    email: 'tony@starkindustries.com'
+};
 
-const MOCKED_USERS = [
-  "alice", "bob", "charlie"
-];
+// sample tuit to create
+const testTuit = {
+    tuit: 'I am Iron Man.',
+    postedOn: '2022-10-30T00:00:00.000Z'
+};
+let newUser = null;
 
-const MOCKED_TUITS = [
-  "alice's tuit", "bob's tuit", "charlie's tuit"
-];
+// setup the tests before running
+beforeAll(async () => {
+    // insert the sample user to use for creating tuit
+    newUser = await createUser(testUser);
+    // create tuit for testing
+    await createTuit(newUser._id, testTuit);
+});
 
-test('tuit list renders static tuit array', () => {
-  // TODO: implement this
+// clean up after test runs
+afterAll(async () => {
+    // remove any data we created
+    await deleteTuitByUser(newUser._id)
+    await deleteUsersByUsername(testUser.username);
 });
 
 test('tuit list renders async', async () => {
-  // TODO: implement this
-})
-
-test('tuit list renders mocked', async () => {
-  // TODO: implement this
+    // retrieve all tuits using api
+    const tuits = await findAllTuits();
+    render(
+        <HashRouter>
+            <Tuits tuits={tuits}/>
+        </HashRouter>);
+    // find element with specific text from test tuit
+    const tuitElement = screen.getByText(/Iron Man/i);
+    expect(tuitElement).toBeInTheDocument();
 });

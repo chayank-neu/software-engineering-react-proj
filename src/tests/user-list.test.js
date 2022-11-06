@@ -1,46 +1,35 @@
-import {UserList} from "../components/profile/userList";
+import {UserList} from "../components/profile/user-list";
 import {screen, render} from "@testing-library/react";
 import {HashRouter} from "react-router-dom";
-import {findAllUsers} from "../services/users-service";
-import axios from "axios";
+import {createUser, deleteUsersByUsername, findAllUsers} from "../services/users-service";
 
-jest.mock('axios');
+// sample user to delete
+const testUser = {
+  username: 'harrypotter',
+  password: 'theboywholived',
+  email: 'harry.potter@hogwarts.com'
+};
 
-const MOCKED_USERS = [
-  {username: 'ellen_ripley', password: 'lv426', email: 'repley@weyland.com', _id: "123"},
-  {username: 'sarah_conor', password: 'illbeback', email: 'sarah@bigjeff.com', _id: "234"},
-]
+// setup the tests before verification
+beforeAll(async () => {
+  // insert the sample user we then try to remove
+  await createUser(testUser);
+});
 
-test('user list renders static user array', () => {
-  render(
-    <HashRouter>
-      <UserList users={MOCKED_USERS}/>
-    </HashRouter>);
-  const linkElement = screen.getByText(/ellen_ripley/i);
-  expect(linkElement).toBeInTheDocument();
+// clean up after test runs
+afterAll(async () => {
+  // remove any data we created
+  await deleteUsersByUsername(testUser.username);
 });
 
 test('user list renders async', async () => {
+  // retrieve all users using api
   const users = await findAllUsers();
   render(
     <HashRouter>
       <UserList users={users}/>
     </HashRouter>);
-  const linkElement = screen.getByText(/NASA/i);
+  // find element with specific text from test user
+  const linkElement = screen.getByText(/harrypotter/i);
   expect(linkElement).toBeInTheDocument();
-})
-
-test('user list renders mocked', async () => {
-  axios.get.mockImplementation(() =>
-    Promise.resolve({ data: {users: MOCKED_USERS} }));
-  const response = await findAllUsers();
-  const users = response.users;
-
-  render(
-    <HashRouter>
-      <UserList users={users}/>
-    </HashRouter>);
-
-  const user = screen.getByText(/ellen_ripley/i);
-  expect(user).toBeInTheDocument();
 });
