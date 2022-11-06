@@ -1,7 +1,7 @@
 import axios from "axios";
-const BASE_URL = "http://my-node-express-project-env.eba-hxq4pgvm.us-east-1.elasticbeanstalk.com"
-const TUITS_API = `${BASE_URL}/api/tuits`;
-const USERS_API = `${BASE_URL}/api/users`;
+const BASE_URL = "http://localhost:4000";
+const TUITS_API = `${BASE_URL}/tuits`;
+const USERS_API = `${BASE_URL}/users`;
 
 export const findAllTuits = () =>
   axios.get(TUITS_API)
@@ -25,4 +25,8 @@ export const updateTuit = (tid, tuit) =>
 
 export const deleteTuit = (tid) =>
   axios.delete(`${TUITS_API}/${tid}`)
+    .then(response => response.data);
+
+export const deleteTuitByUser = (uid) =>
+  axios.delete(`${USERS_API}/${uid}/tuits`)
     .then(response => response.data);

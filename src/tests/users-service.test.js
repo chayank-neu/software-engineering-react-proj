@@ -113,10 +113,10 @@ describe('findAllUsers',  () => {
   ];
 
   // setup data before test
-  beforeAll(() =>
+  beforeAll(async () =>
     // insert several known users
-    usernames.map(username =>
-      createUser({
+    usernames.map(async (username) =>
+      await createUser({
         username,
         password: `${username}123`,
         email: `${username}@stooges.com`
@@ -125,11 +125,11 @@ describe('findAllUsers',  () => {
   );
 
   // clean up after ourselves
-  afterAll(() =>
+  afterAll(async () =>
     // delete the users we inserted
-    usernames.map(username =>
-      deleteUsersByUsername(username)
-    )
+    await Promise.all(usernames.map(async (username) =>
+        await deleteUsersByUsername(username)
+    ))
   );
 
   test('can retrieve all users from REST API', async () => {
