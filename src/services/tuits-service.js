@@ -1,5 +1,5 @@
 import axios from "axios";
-const BASE_URL = "http://fse-a3-env-1.eba-pjswm9hp.us-east-1.elasticbeanstalk.com";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 const TUITS_API = `${BASE_URL}/tuits`;
 const USERS_API = `${BASE_URL}/users`;
 
