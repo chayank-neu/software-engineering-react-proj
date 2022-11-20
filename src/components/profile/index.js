@@ -1,7 +1,8 @@
 import MyTuits from "./my-tuits";
 import * as service from "../../services/auth-service"
-import {Routes, Route, useNavigate} from "react-router-dom";
+import {Link, Routes, Route, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
+import MyLikes from "./my-likes";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -23,15 +24,27 @@ const Profile = () => {
   }
   return(
       <div>
-        <h4>{profile.username}</h4>
-        <h6>@{profile.username}</h6>
-        <button onClick={logout}>
-          Logout</button>
+          <h4>{profile.username}</h4>
+          <h6>@{profile.username}</h6>
+          <button onClick={logout}>
+              Logout</button>
+          <ul className="nav nav-pills nav-fill">
+              <li className="nav-item">
+                  <Link to="/profile/mytuits">
+                      Tuits</Link>
+              </li>
+              <li className="nav-item">
+                  <Link to="/profile/mylikes">
+                      Likes</Link>
+              </li>
+          </ul>
 
-          <Routes>
-              <Route path="/mytuits"
-                     element={<MyTuits/>}/>
-          </Routes>
+        <Routes>
+          <Route path="/mytuits"
+                 element={<MyTuits/>}/>
+          <Route path="/mylikes"
+                 element={<MyLikes/>}/>
+        </Routes>
 
       </div>
   );
