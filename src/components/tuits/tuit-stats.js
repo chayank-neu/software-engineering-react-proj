@@ -17,7 +17,15 @@ export default class TuitStats extends React.Component {
         </div>
         <div className="col">
           <span onClick={() => this.props.likeTuit(this.props.tuit)}>
-              <i className="far fa-heart me-1"></i>
+              {
+                  this.props.tuit.stats.likes > 0 &&
+                  <i className="far fa-heart me-1"
+                     style={{color: 'red'}}></i>
+              }
+              {
+                  this.props.tuit.stats.likes <= 0 &&
+                  <i className="far fa-heart me-1"></i>
+              }
               {this.props.tuit.stats && this.props.tuit.stats.likes}
           </span>
         </div>
