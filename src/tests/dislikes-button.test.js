@@ -1,8 +1,8 @@
 import {createUser, deleteUser} from "../services/users-service";
 import {createTuit, deleteTuitByUser} from "../services/tuits-service";
-import {findAllTuitsLikedByUser, userTogglesTuitLikes} from "../services/likes-service";
+import {findAllTuitsDislikedByUser, userTogglesTuitDislikes} from "../services/dislikes-service";
 
-describe('like button updates tuit stats', () => {
+describe('dislike button updates tuit stats', () => {
 
     // sample users we'll insert to then retrieve
     const usernames = [
@@ -30,7 +30,7 @@ describe('like button updates tuit stats', () => {
     afterAll(async () => {
         // remove any data we created
         for (const user of newUsers) {
-            await userTogglesTuitLikes(user._id, newTuit._id);
+            await userTogglesTuitDislikes(user._id, newTuit._id);
         }
         await Promise.all(newUsers.map(async (user) => {
             await deleteTuitByUser(user._id);
@@ -38,25 +38,25 @@ describe('like button updates tuit stats', () => {
         }))
     })
 
-    test('like button updates tuit stats', async () => {
+    test('dislike button updates tuit stats', async () => {
         // create new tuit by first user
         const user0 = newUsers[0];
         newTuit = await createTuit(user0._id, {
             tuit: `Test Tuit by ${user0.username}`
         });
-        // all users like the new tuit
+        // all users dislike the new tuit
         for (const newUser of newUsers) {
-            await userTogglesTuitLikes(newUser._id, newTuit._id);
+            await userTogglesTuitDislikes(newUser._id, newTuit._id);
         }
 
-        // retrieve all the tuits liked by user 0
-        const allLikedTuits = await findAllTuitsLikedByUser(user0._id);
-        const filtered = allLikedTuits.filter(tuit => tuit._id === newTuit._id);
+        // retrieve all the tuits disliked by user 0
+        const allDislikedTuits = await findAllTuitsDislikedByUser(user0._id);
+        const filtered = allDislikedTuits.filter(tuit => tuit._id === newTuit._id);
         // check filtered tuits to include our sent tuit
         expect(filtered.length).toEqual(1);
         const tuitStats = filtered[0].stats;
 
-        // compare the tuit stats retrieved from api with the number of users who liked
-        expect(tuitStats.likes).toEqual(newUsers.length);
+        // compare the tuit stats retrieved from api with the number of users who disliked
+        expect(tuitStats.dislikes).toEqual(newUsers.length);
     });
 });
