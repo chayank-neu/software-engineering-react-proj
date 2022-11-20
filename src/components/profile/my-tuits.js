@@ -13,7 +13,8 @@ const MyTuits = () => {
             .then(findMyTuits);
     return(
         <Tuits tuits={tuits}
-               deleteTuit={deleteTuit}/>
+               deleteTuit={deleteTuit}
+               refreshTuits={findMyTuits}/>
     );
 };
 
