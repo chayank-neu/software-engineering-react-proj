@@ -8,7 +8,7 @@ const api = axios.create({
 });
 
 export const findAllTuits = () =>
-    api.get(TUITS_API)
+    axios.get(TUITS_API)
         .then(response => response.data);
 
 export const findTuitById = (tid) =>
