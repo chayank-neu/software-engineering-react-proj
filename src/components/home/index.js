@@ -12,7 +12,7 @@ const Home = () => {
   const userId = uid;
   const findTuits = () => {
     if(uid) {
-      return service.findTuitByUser(uid)
+      return service.findTuitsByUser(uid)
         .then(tuits => setTuits(tuits))
     } else {
       return service.findAllTuits()
@@ -68,7 +68,8 @@ const Home = () => {
           </div>
         }
       </div>
-      <Tuits tuits={tuits} deleteTuit={deleteTuit}/>
+      <Tuits tuits={tuits} deleteTuit={deleteTuit}
+             refreshTuits={findTuits}/>
     </div>
   );
 };
